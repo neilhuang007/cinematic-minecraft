@@ -1,3 +1,5 @@
+THIS repository contains **issue tracking** and **configurations** for the **Cinematic Minecraft** modpack.
+
 # Cinematic Minecraft — Vanilla+ Performance & Polish (Fabric 1.21.1)
 
 A **Vanilla-first** modpack that keeps the core gameplay intact while delivering **high, stable FPS**, **cinematic draw distance**, **subtle visual upgrades**, and **clean UI/UX**.
@@ -64,6 +66,8 @@ This repository exists primarily for **issue tracking**, feature requests, and d
 
 ## Reporting Issues
 
+If you encounter any **bugs, crashes, or performance issues**, please report them in the **[Issues tab](../../issues)** on GitHub.
+
 Open a **New Issue** and use this template:
 
 ```
@@ -97,7 +101,7 @@ Screenshots/video:
 
 ## Feature Requests
 
-Open a **Feature request** issue and include:
+Want to **suggest a mod** to be added to this modpack or request a new feature? Open a **Feature request** in the **[Issues tab](../../issues)** and include:
 
 * The “why” (user problem this solves).
 * Proposed mod(s) or change.
