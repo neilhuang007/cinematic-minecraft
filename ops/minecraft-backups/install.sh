@@ -38,6 +38,8 @@ systemd-analyze verify \
   /etc/systemd/system/mc-backup.timer \
   /etc/systemd/system/mc-backup-events.service
 systemctl daemon-reload
-systemctl enable --now mc-backup.timer mc-backup-events.service
+systemctl enable --now mc-backup.timer
+systemctl enable mc-backup-events.service
+systemctl restart mc-backup-events.service
 
 echo "Minecraft daily and player-event backup services installed."
