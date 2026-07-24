@@ -1,0 +1,26 @@
+[Unit]
+Description=Create Minecraft Borg backups for real player login and logout
+After=network-online.target
+Before=minecraft.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /usr/local/bin/mc-backup-event-watch.py --state-file /var/lib/minecraft-backup/real-player-state.json --backup-command /usr/local/bin/mc-backup.sh
+Restart=on-failure
+RestartSec=5s
+StateDirectory=minecraft-backup
+StateDirectoryMode=0750
+CacheDirectory=minecraft-backup
+CacheDirectoryMode=0750
+Environment=BORG_CONFIG_DIR=/var/lib/minecraft-backup/borg/config
+Environment=BORG_SECURITY_DIR=/var/lib/minecraft-backup/borg/security
+Environment=BORG_KEYS_DIR=/var/lib/minecraft-backup/borg/keys
+Environment=BORG_CACHE_DIR=/var/cache/minecraft-backup/borg
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectHome=true
+ProtectSystem=full
+
+[Install]
+WantedBy=multi-user.target

@@ -1,5 +1,8 @@
 THIS repository contains **issue tracking** and **configurations** for the **Cinematic Minecraft** modpack.
 
+Server operation artifacts, including the reviewed Borg backup payload, are in
+[`ops/`](ops/) and documented in [`docs/minecraft-backups.md`](docs/minecraft-backups.md).
+
 # Cinematic Minecraft — Vanilla+ Performance & Polish (Fabric 1.21.1)
 
 A **Vanilla-first** modpack that keeps the core gameplay intact while delivering **high, stable FPS**, **cinematic draw distance**, **subtle visual upgrades**, and **clean UI/UX**.

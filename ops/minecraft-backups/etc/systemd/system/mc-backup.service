@@ -1,0 +1,10 @@
+[Unit]
+Description=Minecraft world backup (Borg)
+After=network-online.target minecraft.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/mc-backup.sh --daily
+Nice=10
+IOSchedulingClass=idle
