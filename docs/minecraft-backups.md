@@ -24,6 +24,11 @@ of a short session remain recoverable during the two-day incident-response
 window. Borg compaction happens with the daily run; event runs still prune
 their old archives immediately.
 
+The production repository currently uses Borg encryption mode `none`. The
+event service explicitly acknowledges its first access from the service's
+isolated, persistent Borg security directory; this avoids an interactive
+prompt without exposing the root account's Borg state.
+
 ## Player-event detection
 
 `mc-backup-events.service` tails only new `minecraft.service` journal lines.

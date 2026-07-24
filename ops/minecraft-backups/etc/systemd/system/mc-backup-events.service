@@ -17,6 +17,10 @@ Environment=BORG_CONFIG_DIR=/var/lib/minecraft-backup/borg/config
 Environment=BORG_SECURITY_DIR=/var/lib/minecraft-backup/borg/security
 Environment=BORG_KEYS_DIR=/var/lib/minecraft-backup/borg/keys
 Environment=BORG_CACHE_DIR=/var/cache/minecraft-backup/borg
+# Production currently uses Borg encryption mode "none". The sandbox has its
+# own persistent security directory, so acknowledge that known repository on
+# its first non-interactive access.
+Environment=BORG_UNKNOWN_UNENCRYPTED_REPO_ACCESS_IS_OK=yes
 NoNewPrivileges=true
 PrivateTmp=true
 ProtectHome=true
