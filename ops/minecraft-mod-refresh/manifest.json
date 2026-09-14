@@ -1,0 +1,205 @@
+{
+  "schema": 1,
+  "tag": "refresh-20260913-222125",
+  "minecraft": "1.21.11",
+  "server": "/srv/minecraft/servers/fabric-1.21.11",
+  "loader": {
+    "old": "0.19.3",
+    "new": "0.19.5",
+    "url": "https://meta.fabricmc.net/v2/versions/loader/1.21.11/0.19.5/1.1.2/server/jar",
+    "old_sha256": "ed1b811d75555bd18dfc2b15199d94559ee2aab035e3c92ee43d3c4addca819f",
+    "new_sha256": "2b63d293be54c8f5484a242859cab841dcee38511e11b2f82e92211f19872d08"
+  },
+  "changes": [
+    {
+      "id": "farmersdelight",
+      "new_id": "farmersdelight",
+      "old_version": "1.21.11-3.6.9+refabricated",
+      "new_version": "1.21.11-3.6.16+refabricated",
+      "old_file": "FarmersDelight-1.21.11-3.6.9+refabricated.jar",
+      "new_file": "FarmersDelight-1.21.11-3.6.16+refabricated.jar",
+      "old_sha256": "6c5088c98a1336d1693292fbae1b14525ae318a7571756c780901b0df0826751",
+      "new_sha256": "0cf49e7251a018acaa0cc4d3b394b3b311a2457910200697001b9aeb404c072d"
+    },
+    {
+      "id": "mes",
+      "new_id": "mes",
+      "old_version": "2.0.3",
+      "new_version": "2.1.0",
+      "old_file": "MoogsEndStructures-1.21-2.0.3.jar",
+      "new_file": "MoogsEndStructures-universal-1.21-2.1.0.jar",
+      "old_sha256": "6dd403739a473c38aa2a6660dc4891be1525743f5e7be0cf4c25b93b4491b4ea",
+      "new_sha256": "6358df35c65eafd6566640d48e1a8abfd6347893d9403fdf900f561ff2ff9a65"
+    },
+    {
+      "id": "ohthetreesyoullgrow",
+      "new_id": "ohthetreesyoullgrow",
+      "old_version": "9.0.0",
+      "new_version": "9.1.0",
+      "old_file": "Oh-The-Trees-Youll-Grow-fabric-1.21.11-9.0.0.jar",
+      "new_file": "Oh-The-Trees-Youll-Grow-fabric-1.21.11-9.1.0.jar",
+      "old_sha256": "f2fd0b68f6f393f68176446fef8611d0f5d889a6c29eb76336dd597c24b5862a",
+      "new_sha256": "f1e70264e185c516cc331b0c5eed7dee7c21644ec917d7998b5b715296529ab8"
+    },
+    {
+      "id": "automodpack",
+      "new_id": "automodpack",
+      "old_version": "4.0.5",
+      "new_version": "4.0.6",
+      "old_file": "automodpack-mc1.21.11-fabric-4.0.5.jar",
+      "new_file": "automodpack-mc1.21.11-fabric-4.0.6.jar",
+      "old_sha256": "b6f0fd214eff964e2223f445924e5d9909b0a477276f4a130577cd64c00f5d38",
+      "new_sha256": "bde85113334bc7d833e58feb106e16d1f68f3bc19578566bbc8fc5ba20ec8c93"
+    },
+    {
+      "id": "c2me",
+      "new_id": "c2me",
+      "old_version": "0.4.0-alpha.0.21+1.21.11",
+      "new_version": "0.4.0-alpha.0.26+1.21.11",
+      "old_file": "c2me-fabric-mc1.21.11-0.4.0-alpha.0.21.jar",
+      "new_file": "c2me-fabric-mc1.21.11-0.4.0-alpha.0.26.jar",
+      "old_sha256": "7381ab92b157910b67c6072d51cd8f82ba1b80b73352775a6b4298c393618c88",
+      "new_sha256": "232a1a25196b7e704abca3f278d3fc4cf4f5f70d56019d4e668a5750fc86c2d6"
+    },
+    {
+      "id": "carpet-tis-addition",
+      "new_id": "carpet-tis-addition",
+      "old_version": "1.82.3",
+      "new_version": "1.82.4",
+      "old_file": "carpet-tis-addition-v1.82.3-mc1.21.11.jar",
+      "new_file": "carpet-tis-addition-v1.82.4-mc1.21.11.jar",
+      "old_sha256": "1e951c7e2a0ba53595df10ecd1374eb14eac9bacdf469e14e6da3fa7e498838d",
+      "new_sha256": "a877dd11626daadee780c889d1ecebe40face5576fe28e49ca6ac3292a38ba41"
+    },
+    {
+      "id": "fabric-api",
+      "new_id": "fabric-api",
+      "old_version": "0.141.5+1.21.11",
+      "new_version": "0.141.6+1.21.11",
+      "old_file": "fabric-api-0.141.5+1.21.11.jar",
+      "new_file": "fabric-api-0.141.6+1.21.11.jar",
+      "old_sha256": "2525f9b7bb5524d409404831f7af276a86f7f1e90245ae4bb7555fe088d00e0d",
+      "new_sha256": "bdff7fd7e220085cfad2ff9b1f40dde6534ae0b96cf378f97a374bc54cb9ed0f"
+    },
+    {
+      "id": "fabric-language-kotlin",
+      "new_id": "fabric-language-kotlin",
+      "old_version": "1.13.13+kotlin.2.4.10",
+      "new_version": "1.14.1+kotlin.2.4.20",
+      "old_file": "fabric-language-kotlin-1.13.13+kotlin.2.4.10.jar",
+      "new_file": "fabric-language-kotlin-1.14.1+kotlin.2.4.20.jar",
+      "old_sha256": "34ccdacf13bb9351fe43ce61912c2e09b72364e43e787d36ba3d2d04dec75a52",
+      "new_sha256": "620c2709be2a262b837cf976f6f85f6eda80a56af2ba4242e0bdc83a60fee7a5"
+    },
+    {
+      "id": "formationsnether",
+      "new_id": "formationsnether",
+      "old_version": "1.0.5",
+      "new_version": "1.0.5+b",
+      "old_file": "formationsnether-1.0.5-mc1.21+.jar",
+      "new_file": "formationsnether-1.0.5b-mc1.21+.jar",
+      "old_sha256": "5a2072de5d94ebf6230803c73af2f2de7374263efc068ce50e8fb6fc93336505",
+      "new_sha256": "b903e98fdeacb5b70b10baafe224c512a6efa843c53f0386d50cc48ce4ad19c9"
+    },
+    {
+      "id": "formationsoverworld",
+      "new_id": "formationsoverworld",
+      "old_version": "1.0.5",
+      "new_version": "1.0.5+b",
+      "old_file": "formationsoverworld-1.0.5-mc1.21+.jar",
+      "new_file": "formationsoverworld-1.0.5b-mc1.21+.jar",
+      "old_sha256": "d031d480bc18197011d135004216c3d395dc2656ebc2762201e8f611b8fa3ced",
+      "new_sha256": "9b2c046fd72669a04dddb66493a36f0da0e2800c3660c5ce896a7fc33e235a5f"
+    },
+    {
+      "id": "friendsandfoes",
+      "new_id": "friendsandfoes",
+      "old_version": "4.0.26",
+      "new_version": "4.0.27",
+      "old_file": "friendsandfoes-fabric-4.0.26+mc1.21.11.jar",
+      "new_file": "friendsandfoes-fabric-4.0.27+mc1.21.11.jar",
+      "old_sha256": "611931769ae315d38ae295330c453def5a5e488d3044d24dfc5b80e49908a3ff",
+      "new_sha256": "99abdb5d884824109baabe86af9bb49c9f19d403aa7f39a85a03388ca07ad74b"
+    },
+    {
+      "id": "immersive_paintings",
+      "new_id": "immersive_paintings",
+      "old_version": "0.7.8",
+      "new_version": "0.7.9",
+      "old_file": "immersive_paintings-fabric-1.21.11-0.7.8.jar",
+      "new_file": "immersive_paintings-fabric-1.21.11-0.7.9.jar",
+      "old_sha256": "f5a8d742cf4045d3de3e52c37a1bdbf8a8644d58adfa5c1d06fa0ba31e1243c9",
+      "new_sha256": "2ac34086bf2e4db86b223a5f39e72aef4f92a45d56ad995bd5eadeb361c041ef"
+    },
+    {
+      "id": "jei",
+      "new_id": "jei",
+      "old_version": "27.17.0.50",
+      "new_version": "27.35.0.90",
+      "old_file": "jei-1.21.11-fabric-27.17.0.50.jar",
+      "new_file": "jei-1.21.11-fabric-27.35.0.90.jar",
+      "old_sha256": "8b74d5c7df74faba74aa2f21d15f24cd9a653dbf7adf70ac8f474bba331ea9e7",
+      "new_sha256": "8beb67db5fc9e73f873144f508ffdb9c4eb394517d62fd5a37cd131ec5fb46f3"
+    },
+    {
+      "id": "moogs_structures",
+      "new_id": "moogs_structures",
+      "old_version": "3.0.2+fabric",
+      "new_version": "3.1.2+fabric",
+      "old_file": "moogs_structures-fabric-1.21.11-3.0.2.jar",
+      "new_file": "MoogsStructureLib-fabric-1.21.11-3.1.2.jar",
+      "old_sha256": "c24710fc733c5f3a9b362030a86eac13df5e24f3c88059c8d90e3f820b3e2b71",
+      "new_sha256": "5c47d1bf251ee0487991b1d466c750e5bf04001b95b8a735337d7c67c5928f5a"
+    },
+    {
+      "id": "syncmatica",
+      "new_id": "syncmatica",
+      "old_version": "0.3.19",
+      "new_version": "0.3.20",
+      "old_file": "syncmatica-fabric-1.21.11-0.3.19.jar",
+      "new_file": "syncmatica-fabric-1.21.11-0.3.20.jar",
+      "old_sha256": "bb8bad105ba9126df724ac300e4fde64dae354fe2a778f9d779635159fa92925",
+      "new_sha256": "19c4c072bb55726d2040c241debbe73881df77ae355846e765338d978086898b"
+    },
+    {
+      "id": "voicechat",
+      "new_id": "voicechat",
+      "old_version": "1.21.11-2.6.21",
+      "new_version": "1.21.11-2.6.22",
+      "old_file": "voicechat-fabric-1.21.11-2.6.21.jar",
+      "new_file": "voicechat-fabric-1.21.11-2.6.22.jar",
+      "old_sha256": "d3a5ed4d7c367f8fc2545c440f9d8038b5715674d572be01add460bdbe1b9112",
+      "new_sha256": "cb23bfdfb809671288b6d9f9ac3ff5842cd02e1397dd0040be260a73d4e32c62"
+    },
+    {
+      "id": "vss",
+      "new_id": "lss",
+      "old_version": "0.2.3",
+      "new_version": "0.14.0",
+      "old_file": "voxy-server-side-fabric.jar",
+      "new_file": "voxy-server-side-fabric.jar",
+      "old_sha256": "ccdf0df78e66d508212b69b5dc8f35553a730eba7f0ee949dad73549cd7d5888",
+      "new_sha256": "7824f68234aaa170af885e41c4d889aa6dc6ff48cdea830cd7e95995d1f31a93"
+    },
+    {
+      "id": "zfastnoise",
+      "new_id": "zfastnoise",
+      "old_version": "1.0.39+1.21.11",
+      "new_version": "1.0.40+1.21.11",
+      "old_file": "zfastnoise-1.0.39+1.21.11.jar",
+      "new_file": "zfastnoise-1.0.40+1.21.11.jar",
+      "old_sha256": "0ac7a513123a41ff92ef7c1d4add6116298f6e0d258eb086a9369426b1a5d2be",
+      "new_sha256": "2ff54869dc08dc72e676824ff6b2f4a3d5fc0abfa4798f13dd2d9dd0aa7c6f12"
+    }
+  ],
+  "client_only_skipped": [
+    {
+      "id": "fwa",
+      "file": "fwa+1.21.11-1.2.34.jar",
+      "reason": "Client-only update; server copy is ignored by Fabric"
+    }
+  ],
+  "server_only_preserved": [
+    "servux-fabric-1.21.11-0.9.5.jar"
+  ]
+}
