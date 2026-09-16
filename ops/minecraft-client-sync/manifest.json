@@ -1,0 +1,123 @@
+{
+  "schema": 1,
+  "tag": "client-sync-20260916",
+  "server": "/srv/minecraft/servers/fabric-1.21.11",
+  "minecraft": "1.21.11",
+  "fabric_loader": "0.19.5",
+  "changes": [
+    {
+      "id": "c2me",
+      "old_version": "0.4.0-alpha.0.26+1.21.11",
+      "new_version": "0.4.0-alpha.0.27+1.21.11",
+      "old_file": "c2me-fabric-mc1.21.11-0.4.0-alpha.0.26.jar",
+      "new_file": "c2me-fabric-mc1.21.11-0.4.0-alpha.0.27.jar",
+      "old_sha256": "232a1a25196b7e704abca3f278d3fc4cf4f5f70d56019d4e668a5750fc86c2d6",
+      "new_sha256": "684167bee24d099e94454a00b6a1b9ba451d17e858705cc52062b649f487f2d4"
+    },
+    {
+      "id": "formationsoverworld",
+      "old_version": "1.0.5+b",
+      "new_version": "1.0.5+c",
+      "old_file": "formationsoverworld-1.0.5b-mc1.21+.jar",
+      "new_file": "formationsoverworld-1.0.5c-mc1.21+.jar",
+      "old_sha256": "9b2c046fd72669a04dddb66493a36f0da0e2800c3660c5ce896a7fc33e235a5f",
+      "new_sha256": "8ac52001fd43b70bdb72209198152ae44137b476cf9124618f3c7106b95524ba"
+    },
+    {
+      "id": "fwa",
+      "old_version": "1.2.34",
+      "new_version": "1.2.38-patch.2",
+      "old_file": "fwa+1.21.11-1.2.34.jar",
+      "new_file": "fwa+1.21.11-1.2.38-patch.2.jar",
+      "old_sha256": "52f99528f984cffca4e2c056846f372517c4be45ccf2604e3e572a0abecf782b",
+      "new_sha256": "ae111948586c8f89067c7813307bdd75ed74d603c44a59969f52426875719e12"
+    },
+    {
+      "id": "fzzy_config",
+      "old_version": "0.7.6+1.21.11",
+      "new_version": "0.7.7+1.21.11",
+      "old_file": "fzzy_config-0.7.6+1.21.11.jar",
+      "new_file": "fzzy_config-0.7.7+1.21.11.jar",
+      "old_sha256": "6c91c9ed35f01d560a6cb59f5e15266b2ce87d81d69b52aec9df33f71c1b50ea",
+      "new_sha256": "0bc70f87ac66b7577c73c0b08c23266c1f086f6e90e6b4e5930ddab1dbd74678"
+    },
+    {
+      "id": "jade",
+      "old_version": null,
+      "new_version": "21.1.6+fabric",
+      "old_file": null,
+      "new_file": "Jade-1.21.11-Fabric-21.1.6.jar",
+      "old_sha256": null,
+      "new_sha256": "bcf1a7f6f9eb325b89d65bc15b41a35fdca2c2b052e9af772ffdcd70548d2fc8"
+    },
+    {
+      "id": "moogs_structures",
+      "old_version": "3.1.2+fabric",
+      "new_version": "3.3.1+fabric",
+      "old_file": "MoogsStructureLib-fabric-1.21.11-3.1.2.jar",
+      "new_file": "MoogsStructureLib-fabric-1.21.11-3.3.1.jar",
+      "old_sha256": "5c47d1bf251ee0487991b1d466c750e5bf04001b95b8a735337d7c67c5928f5a",
+      "new_sha256": "e5a626e98268bac9d47d89c9c2bb284425706e9e62553663689a937ccf14cf16"
+    },
+    {
+      "id": "mr_lukis_grandcapitals",
+      "old_version": null,
+      "new_version": "1.1.3",
+      "old_file": null,
+      "new_file": "lukis-grand-capitals-1.1.3.jar",
+      "old_sha256": null,
+      "new_sha256": "58182dc8d306afd944e708e0480d939a9adc3fcdab75c0bebd122a32c63d3851"
+    },
+    {
+      "id": "nekomasfixed",
+      "old_version": null,
+      "new_version": "0.5.2-1.21.11",
+      "old_file": null,
+      "new_file": "nekomasfixed-0.5.3-1.21.11.jar",
+      "old_sha256": null,
+      "new_sha256": "7b02eb148ec6d1364bdf6d683233f58fa0632aa8bc391ab647c41a4378f4a2fb"
+    },
+    {
+      "id": "physicsmod",
+      "old_version": null,
+      "new_version": "3.1.41",
+      "old_file": null,
+      "new_file": "physics-mod-pro-v183q-fabric-mc-1.21.11.jar",
+      "old_sha256": null,
+      "new_sha256": "14e34330430f5dc3b0b1625b19b5d38169a944bdcd33bd7ba2f750cc5601dd85"
+    },
+    {
+      "id": "shulkerboxtooltip",
+      "old_version": null,
+      "new_version": "5.2.16+1.21.11",
+      "old_file": null,
+      "new_file": "shulkerboxtooltip-fabric-5.2.16+1.21.11.jar",
+      "old_sha256": null,
+      "new_sha256": "b69bd63be42ca15d4f3eaabd8e185836bc30c1dcbaa9d1a7eafa851d9b67658f"
+    },
+    {
+      "id": "streamsreflowing",
+      "old_version": null,
+      "new_version": "2.13.7",
+      "old_file": null,
+      "new_file": "StreamsReflowing-1.21.11-fabric-2.13.7.jar",
+      "old_sha256": null,
+      "new_sha256": "0a2958820f743cb7faca67260ceb037457ff43ea2f717e9cd2b16a9b8244ef80"
+    },
+    {
+      "id": "wits",
+      "old_version": null,
+      "new_version": "1.4.1+1.21.11-fabric",
+      "old_file": null,
+      "new_file": "wits-1.4.1+1.21.11-fabric.jar",
+      "old_sha256": null,
+      "new_sha256": "eaa2a22d25412a06349228fabdb2a2097d8fd8f2f431dc30b93c716cd24eab62"
+    }
+  ],
+  "configs": [
+    {
+      "path": "config/streamsreflowing.properties",
+      "sha256": "356f0b15ecbd68087079085da7e23b0798f31415403b45f85cd246a5bba3ddb8"
+    }
+  ]
+}
