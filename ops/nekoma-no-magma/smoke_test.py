@@ -6,6 +6,7 @@ import os
 from pathlib import Path
 import secrets
 import shutil
+import socket
 import subprocess
 import time
 
@@ -36,15 +37,26 @@ def main():
         shutil.copy2(production / 'mods' / name, staging / 'mods' / name)
     (staging / 'eula.txt').write_text('eula=true\n')
     password = secrets.token_hex(24)
+    with socket.socket() as game_socket, socket.socket() as rcon_socket:
+        game_socket.bind(('127.0.0.1', 0))
+        rcon_socket.bind(('127.0.0.1', 0))
+        game_port = game_socket.getsockname()[1]
+        rcon_port = rcon_socket.getsockname()[1]
+    flat_settings = json.dumps({'biome': 'minecraft:plains', 'layers': [
+        {'block': 'minecraft:bedrock', 'height': 1},
+        {'block': 'minecraft:dirt', 'height': 2},
+        {'block': 'minecraft:grass_block', 'height': 1}],
+        'features': False, 'lakes': False, 'structure_overrides': []})
     (staging / 'server.properties').write_text(
-        'server-ip=127.0.0.1\nserver-port=25575\nonline-mode=false\n'
-        'enable-rcon=true\nrcon.port=25576\nrcon.password=' + password + '\n'
-        'level-type=minecraft:flat\ngenerate-structures=false\n'
+        'server-ip=127.0.0.1\nserver-port=' + str(game_port) + '\nonline-mode=false\n'
+        'enable-rcon=true\nrcon.port=' + str(rcon_port) + '\nrcon.password=' + password + '\n'
+        'level-type=minecraft:flat\ngenerator-settings=' + flat_settings + '\n'
+        'generate-structures=false\n'
         'view-distance=2\nsimulation-distance=2\nmax-tick-time=180000\n'
         'spawn-protection=0\nbroadcast-rcon-to-ops=false\n')
     os.chmod(staging / 'server.properties', 0o600)
     rcon_env = dict(os.environ, MCRCON_HOST='127.0.0.1',
-                    MCRCON_PORT='25576', MCRCON_PASS=password)
+                    MCRCON_PORT=str(rcon_port), MCRCON_PASS=password)
 
     def rcon(*commands):
         result = subprocess.run(['mcrcon', *commands], env=rcon_env,
