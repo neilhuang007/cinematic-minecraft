@@ -1,4 +1,4 @@
-"""Compare actual survival mining before/after the patch in a disposable server."""
+"""Verify the magma hook is removed and survival mining leaves air in staging."""
 
 import argparse
 import json
@@ -67,11 +67,17 @@ def main():
 
     for label, jar in [('original', original), ('patched', patched)]:
         shutil.copy2(jar, staging / 'mods' / original.name)
+        exported_block = staging / '.mixin.out/class/net/minecraft/class_2248.class'
+        if exported_block.exists():
+            exported_block.unlink()
         log_path = staging / (label + '-console.log')
         print('Starting ' + label + ' staging server', flush=True)
         with log_path.open('w') as console:
             process = subprocess.Popen(
                 ['/opt/jdk24/bin/java', '-Xms512m', '-Xmx2g',
+                 '-Dmixin.debug.export=true',
+                 '-Dmixin.debug.export.filter=net.minecraft.class_2248',
+                 '-Dmixin.debug.export.decompile=false',
                  '-jar', 'fabric-server-launch.jar', 'nogui'],
                 cwd=staging, stdout=console, stderr=subprocess.STDOUT)
             try:
@@ -83,6 +89,9 @@ def main():
                         raise RuntimeError('Staging startup timed out: ' + str(log_path))
                     time.sleep(1)
                 print(label + ' staging ready', flush=True)
+                hook_loaded = b'customAfterBreak' in exported_block.read_bytes()
+                if hook_loaded != (label == 'original'):
+                    raise RuntimeError('Unexpected magma hook in the running Block class')
                 rcon('player MagmaProbe spawn at 0.5 6 0.5 facing 0 90',
                      'gamemode survival MagmaProbe',
                      'item replace entity MagmaProbe weapon.mainhand with minecraft:diamond_pickaxe',
@@ -98,11 +107,12 @@ def main():
                     response = rcon('execute if block 0 5 0 minecraft:' + block +
                                     ' run time query gametime')
                     state[block] = 'The time is' in response
-                expected = 'lava' if label == 'original' else 'air'
                 print(json.dumps({'variant': label, 'mined_block': state,
-                                  'expected': expected}), flush=True)
-                if not state[expected] or sum(state.values()) != 1:
-                    raise RuntimeError('Mining did not yield ' + expected)
+                                  'magma_hook_loaded': hook_loaded}), flush=True)
+                if sum(state.values()) != 1 or state['magma_block']:
+                    raise RuntimeError('Survival player did not mine the magma block')
+                if label == 'patched' and not state['air']:
+                    raise RuntimeError('Patched survival mining did not leave air')
                 rcon('player MagmaProbe kill')
             finally:
                 if process.poll() is None:
@@ -112,7 +122,7 @@ def main():
                     except (RuntimeError, subprocess.TimeoutExpired):
                         process.terminate()
                         process.wait(timeout=30)
-    print('PASS: original creates lava; patched mining leaves air', flush=True)
+    print('PASS: magma hook removed from running Block class; patched mining leaves air', flush=True)
 
 
 if __name__ == '__main__':

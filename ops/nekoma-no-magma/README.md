@@ -21,8 +21,10 @@ python3 /opt/cinematic-minecraft/ops/nekoma-no-magma/patch.py \
 ```
 
 Test the jar in an isolated localhost-only staging server with a disposable
-world. Verify that a survival fake player mining magma with a normal pickaxe
-leaves air, and that server startup succeeds. Stop staging after testing.
+world. `smoke_test.py` checks the actual transformed Minecraft Block class:
+the original loads the magma hook and the patched version does not. It also
+verifies that a survival fake player mining magma with a normal pickaxe leaves
+air in the patched server. Stop staging after testing.
 
 For production, stop `minecraft.service` gracefully, preserve the original jar
 in the backup directory, install the patched jar with the same filename and
