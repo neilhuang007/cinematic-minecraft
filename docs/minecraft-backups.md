@@ -63,6 +63,9 @@ are deliberately outside automatic retention.
 A 5 GiB free-space guard attempts maintenance before refusing another backup.
 This reserves headroom for repository maintenance. `last-success.json` in
 `/var/lib/minecraft-backup` records only successfully completed archives.
+Hourly maintenance reports both filesystems and exits with an error at 85%
+used or below the configured free-space reserve, making capacity pressure
+visible in systemd before either volume fills.
 
 ## Storage layout
 

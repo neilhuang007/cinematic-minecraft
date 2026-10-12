@@ -127,3 +127,12 @@ esac
         result, calls = self.run_backup("--maintenance", TEST_PRUNE_RC="2")
         self.assertNotEqual(0, result.returncode)
         self.assertTrue(any(c.startswith("borg compact") for c in calls), calls)
+
+    def test_public_entrypoint_acquires_and_releases_shared_lock(self):
+        lock = self.root / "backup.lock"
+        result, calls = self.run_backup("--daily", MC_BACKUP_LOCK_HELD="0",
+                                        MC_BACKUP_LOCK_FILE=str(lock))
+        self.assertEqual(0, result.returncode, result.stderr)
+        self.assertTrue(any(c.startswith("borg create ") for c in calls))
+        unlocked = subprocess.run(["flock", "-n", str(lock), "true"], timeout=5)
+        self.assertEqual(0, unlocked.returncode)
