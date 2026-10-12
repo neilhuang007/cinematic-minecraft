@@ -44,3 +44,21 @@ temporary chunk tickets. No player teleport is necessary.
 Rollback: disable this datapack and remove its archive; restore saved live
 gateway destinations (or remove `exit_portal` where it was absent). This does
 not roll back other world changes or player inventories.
+
+## Validation and deployment on 2026-10-12
+
+- `verify.py SOURCE_JAR OVERRIDE_ZIP` (using the independent nbtlib parser)
+  passed for all 208 gateway destinations and preservation of every other field.
+- Before the repair, `probe.py 1277 126 -1533` failed with actual arrival
+  `(746.5,60,-881.5)` instead of `(100.5,49,0.5)`.
+- Repaired 25 saved gateway blocks: two ten-block rifts and the five incorrectly
+  generated return gateways. Full original block NBT is backed up in
+  `/srv/minecraft/backups/nullscape-gateway-return-20261012T040328Z/gateway-blocks-before.json`.
+- The same probe passed after repair at `(1277,126,-1533)`, `(747,84,-881)`
+  and `(1372,52,-1171)`.
+- Loaded `nullscape:rift/gateway_shadow1` through Minecraft's real template and
+  data-fixer path in a verified empty volume. Its gateway had
+  `exit_portal:[I;100,49,0]` and `ExactTeleport:1b`, and the item probe passed.
+  The entire temporary template was removed and the volume verified empty again.
+- Datapack enabled last, world saved, all test items removed, and no temporary
+  forced chunks remain. Both players remained online; no restart was needed.
