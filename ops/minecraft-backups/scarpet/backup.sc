@@ -5,7 +5,11 @@ __config() -> {
     'command_permission' -> 'ops'
 };
 
-_requester() -> if(player(), query(player(), 'name'), 'Server');
+// player() may select a nearby player for console calls; use the actual source.
+_requester() -> (
+    caller = system_info('source_entity');
+    if(caller, query(caller, 'name'), 'Server')
+);
 
 __command() -> (
     logger('info', '[MC_BACKUP_REQUEST] '+_requester());
