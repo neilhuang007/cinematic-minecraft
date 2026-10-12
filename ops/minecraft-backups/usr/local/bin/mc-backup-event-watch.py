@@ -15,9 +15,11 @@ import logging
 import os
 from pathlib import Path
 import re
+import socket
 import subprocess
 import sys
 import tempfile
+import time
 from collections.abc import Callable, Iterable
 
 
@@ -127,9 +129,9 @@ class EventWatcher:
             player = logout.group("player")
             if player not in self.real_players:
                 return None
+            self.trigger("logout", player)
             self.real_players.remove(player)
             self._save_state()
-            self.trigger("logout", player)
             return ("logout", player)
         return None
 
@@ -152,26 +154,84 @@ def backup_trigger(backup_command: str) -> Callable[[str, str], None]:
     return trigger
 
 
-def journal_lines() -> Iterable[str]:
+def save_cursor(path: Path, cursor: str) -> None:
+    path.parent.mkdir(mode=0o750, parents=True, exist_ok=True)
+    descriptor, temporary = tempfile.mkstemp(dir=path.parent, prefix=".journal-cursor-")
+    try:
+        with os.fdopen(descriptor, "w", encoding="utf-8") as stream:
+            stream.write(cursor + "\n")
+            stream.flush()
+            os.fsync(stream.fileno())
+        os.replace(temporary, path)
+    finally:
+        if os.path.exists(temporary):
+            os.unlink(temporary)
+
+
+def notify_ready() -> None:
+    address = os.environ.get("NOTIFY_SOCKET")
+    if not address:
+        return
+    if address.startswith("@"):
+        address = "\0" + address[1:]
+    with socket.socket(socket.AF_UNIX, socket.SOCK_DGRAM) as notifier:
+        notifier.connect(address)
+        notifier.sendall(b"READY=1")
+
+
+def journal_lines(cursor_file: Path) -> Iterable[str]:
+    # Capture a starting position BEFORE announcing readiness. Passing that
+    # cursor to the follower closes the process-start race of --lines=0.
+    try:
+        cursor = cursor_file.read_text(encoding="utf-8").strip()
+    except FileNotFoundError:
+        cursor = ""
+    since = f"@{int(time.time())}"
+    if not cursor:
+        tail = subprocess.run(
+            ["journalctl", "-u", "minecraft.service", "--lines=1", "--no-pager", "--output=json"],
+            check=True, capture_output=True, text=True,
+        )
+        for line in tail.stdout.splitlines():
+            record = json.loads(line)
+            cursor = record.get("__CURSOR", "")
+        if cursor:
+            save_cursor(cursor_file, cursor)
     command = [
         "journalctl",
         "-u",
         "minecraft.service",
         "--follow",
-        "--lines=0",
+        "--no-tail",
         "--no-pager",
-        "--output=cat",
+        "--output=json",
     ]
-    LOG.info("Following new Minecraft journal records")
+    command += ["--after-cursor", cursor] if cursor else ["--since", since]
+    LOG.info("Following Minecraft journal from the saved cursor")
     with subprocess.Popen(command, stdout=subprocess.PIPE, text=True, bufsize=1) as process:
         assert process.stdout is not None
-        yield from process.stdout
+        notify_ready()
+        for line in process.stdout:
+            record = json.loads(line)
+            message = record.get("MESSAGE")
+            if isinstance(message, str):
+                yield message
+            # The caller finishes the action before requesting the next line.
+            # If interrupted mid-backup, this record is replayed on restart.
+            if record.get("__CURSOR"):
+                save_cursor(cursor_file, record["__CURSOR"])
     if process.returncode:
         raise RuntimeError(f"journalctl stopped with status {process.returncode}")
 
 
 def parse_arguments() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--cursor-file",
+        type=Path,
+        default=Path("/var/lib/minecraft-backup/journal-cursor.txt"),
+        help="last completely processed journal record, resumed after restart",
+    )
     parser.add_argument(
         "--state-file",
         type=Path,
@@ -199,7 +259,7 @@ def main() -> int:
         format="%(levelname)s %(message)s",
     )
     watcher = EventWatcher(arguments.state_file, backup_trigger(arguments.backup_command))
-    source: Iterable[str] = sys.stdin if arguments.stdin else journal_lines()
+    source: Iterable[str] = sys.stdin if arguments.stdin else journal_lines(arguments.cursor_file)
     try:
         for line in source:
             watcher.process_line(line.rstrip("\n"))

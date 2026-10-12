@@ -107,11 +107,19 @@ unauthenticated connection attempts from creating backups. A local-player
 login also clears a stale matching real session, preventing a fake player from
 inheriting an identity after an unclean server stop.
 
-The watcher starts before Minecraft at boot and follows only new journal
-records rather than replaying old player events. Its state is stored atomically
-in `/var/lib/minecraft-backup` so a watcher-only restart does not forget active
-real sessions. A Minecraft service start boundary clears that state so a name
-from a crashed server generation cannot authorize a later logout backup.
+The watcher starts before Minecraft at boot. Its first installation captures
+the current journal position without replaying earlier history. Subsequent
+starts resume after a durably saved cursor, so requests made during a worker
+restart are not lost. The cursor advances only after an action returns.
+Interrupted actions can be replayed; Borg deduplication and the manual cooldown
+limit duplicate storage. A systemd readiness notification closes the race
+between starting the journal follower and accepting commands after deployment.
+
+Player state is stored atomically in `/var/lib/minecraft-backup`; a watcher-only
+restart retains active real sessions. Logout state is removed after triggering
+the backup so an interrupted logout remains replayable. A Minecraft service
+start boundary clears player state so names from a crashed generation cannot
+authorize a later logout backup.
 
 ## Reconnect and concurrency behavior
 

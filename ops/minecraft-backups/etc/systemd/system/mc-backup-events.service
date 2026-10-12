@@ -6,7 +6,9 @@ Wants=network-online.target
 RequiresMountsFor=/srv /var/lib/minecraft-backups
 
 [Service]
-Type=simple
+Type=notify
+NotifyAccess=main
+TimeoutStartSec=30s
 ExecStart=/usr/bin/python3 /usr/local/bin/mc-backup-event-watch.py --state-file /var/lib/minecraft-backup/real-player-state.json --backup-command /usr/local/bin/mc-backup.sh
 Restart=on-failure
 RestartSec=5s
