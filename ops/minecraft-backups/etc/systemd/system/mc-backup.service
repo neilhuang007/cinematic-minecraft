@@ -2,9 +2,11 @@
 Description=Minecraft world backup (Borg)
 After=network-online.target minecraft.service
 Wants=network-online.target
+RequiresMountsFor=/srv /var/lib/minecraft-backups
 
 [Service]
 Type=oneshot
+TimeoutStartSec=30min
 ExecStart=/usr/local/bin/mc-backup.sh --daily
 Nice=10
 IOSchedulingClass=idle

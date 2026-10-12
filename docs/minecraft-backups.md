@@ -7,9 +7,20 @@ in this repository.
 ## What is backed up
 
 `mc-backup.sh` flushes the running server over local RCON (`save-off`,
-`save-all flush`), creates a Borg archive, and restores autosave even if Borg
-or the flush fails.  It omits transient logs, debug output, crash reports, and
-the world session lock.
+`save-all flush`), takes an LVM snapshot, and immediately restores autosave.
+Borg reads only the read-only snapshot. This avoids racing asynchronous mod
+writes that continue after vanilla's save flush. The archive preserves the
+original `srv/minecraft/servers/fabric-1.21.11/...` paths. It omits transient
+logs, debug output, crash reports, and the world session lock.
+
+The snapshot is a temporary copy-on-write view, not another full world copy.
+LVM freezes/thaws the filesystem during creation. An 8 GiB reserve covers
+changes to the source volume while Borg reads it. The worker unmounts and
+removes its snapshot on completion, errors, and graceful termination. Failed
+snapshot creation, mounting, or world flushing aborts the backup and restores
+autosave. Snapshotting provides a stable filesystem image after the game's
+flush; mod data with separate transactional requirements may need additional
+integration. No Minecraft restart is needed for routine backups.
 
 It creates clearly separated archive families:
 
@@ -18,11 +29,57 @@ It creates clearly separated archive families:
 | Daily timer | `mc-daily-…` | 14 daily archives |
 | Real-player login/logout | `mc-event-login-PLAYER-…` / `mc-event-logout-PLAYER-…` | Every event for 2 days, then 7 daily archives |
 | Earlier timer archives | `mc-YYYY…` | 14 daily archives during migration |
+| `/backup` or `/checkpoint` | `mc-manual-PLAYER-…` | Last 20 plus 4 weekly archives |
+| Unsuccessful attempts | `mc-incomplete-…` | Last 2, separate from good backups |
+
+## In-game commands
+
+- `/backup` and `/checkpoint` request the same incremental Borg checkpoint.
+- `/backup status` and `/checkpoint status` report the latest successful
+  archive and available backup storage.
+- Commands require operator permission level 2. Arbitrary `/script` access is
+  restricted to operators as part of installation.
+- A request returns immediately. Completion or failure is sent privately to
+  the requesting player; a request acknowledgement is not a success report.
+- Both aliases share a 60-second cooldown after a successful manual checkpoint.
+
+The installer loads two small Scarpet apps using the existing Carpet mod.
+`stay_loaded` and `scriptsAutoload` retain the commands across server restarts.
+The apps emit exact server log markers. The existing worker accepts only
+anchored server records, validates player names, and invokes fixed backup
+actions with argument arrays. Chat text and RCON feedback containing a marker
+do not trigger backups. No shell commands or paths come from players.
 
 The event retention applies across all players and both event types. Both ends
 of a short session remain recoverable during the two-day incident-response
-window. Borg compaction happens with the daily run; event runs still prune
-their old archives immediately.
+window. Every run performs retention and compaction, and an independent hourly
+maintenance timer runs even when backup creation fails. Each new archive is
+created in the incomplete family and promoted only after Borg succeeds with
+no warnings and the temporary snapshot is removed. An incomplete attempt can
+never displace the last successful daily archive. Compaction still runs if a
+prune command reports an error. Permanent `mc-preserved-*` historical archives
+are deliberately outside automatic retention.
+
+A 5 GiB free-space guard attempts maintenance before refusing another backup.
+This reserves headroom for repository maintenance. `last-success.json` in
+`/var/lib/minecraft-backup` records only successfully completed archives.
+
+## Storage layout
+
+The Hetzner deployment uses `/dev/vg0/srv` for `/srv` and the `/opt` bind mount.
+`prepare-storage.sh` grows that LV online to 152 GiB and allocates a separate
+40 GiB LV at `/var/lib/minecraft-backups`, using existing unallocated space.
+It preserves at least 16 GiB of unallocated VG space for temporary snapshots.
+The original Borg path is a symlink to `/var/lib/minecraft-backups/borg`, so
+Hill175's existing backup integration continues to use the same repository.
+The volume is mounted through UUID in `/etc/fstab`; backup services require it.
+
+Migration holds the shared backup lock, verifies a checksummed repository copy
+and a Borg repository check, then switches the path. The original directory
+is retained as `borg.before-volume-move` until the new worker and restores are
+verified. This is separate local storage on the same physical mirror, not an
+off-site backup. A separate machine or object-store destination is still
+needed for protection against loss of this host.
 
 The production repository currently uses Borg encryption mode `none`. The
 event service explicitly acknowledges its first access from the service's
@@ -73,6 +130,10 @@ units, installs the following files, and enables the timer and watcher:
 /etc/systemd/system/mc-backup.service
 /etc/systemd/system/mc-backup.timer
 /etc/systemd/system/mc-backup-events.service
+/etc/systemd/system/mc-backup-maintenance.service
+/etc/systemd/system/mc-backup-maintenance.timer
+world/scripts/backup.sc
+world/scripts/checkpoint.sc
 ```
 
 On an existing server, retain its root-only `/etc/minecraft-backup.env` and
@@ -90,7 +151,7 @@ backup.
 
 ## Checks before deployment
 
-Run the parser tests from the repository root:
+Run the parser and actual shell-entry-point regression tests from Linux/WSL:
 
 ```bash
 python3 -m unittest discover -s tests -v
@@ -107,3 +168,10 @@ systemd-analyze verify /etc/systemd/system/mc-backup.service \
 The event watcher is intentionally driven by server-authenticated login log
 records, not the generic `joined the game` line.  Keep that distinction when
 upgrading Minecraft, Fabric Carpet, or log configuration.
+
+After deployment, run a daily backup and each command through RCON, verify
+the command-to-worker-to-Borg flow, test a dry-run extraction, check that no
+temporary LV/mount remains, and confirm autosave was re-enabled. A leftover
+`mc_backup_snapshot` after an ungraceful host/process failure must be inspected
+under the shared lock before removal; the worker will not delete an unknown
+pre-existing snapshot automatically.

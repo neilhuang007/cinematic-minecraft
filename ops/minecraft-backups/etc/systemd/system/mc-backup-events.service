@@ -3,6 +3,7 @@ Description=Create Minecraft Borg backups for real player login and logout
 After=network-online.target
 Before=minecraft.service
 Wants=network-online.target
+RequiresMountsFor=/srv /var/lib/minecraft-backups
 
 [Service]
 Type=simple
@@ -25,6 +26,9 @@ NoNewPrivileges=true
 PrivateTmp=true
 ProtectHome=true
 ProtectSystem=full
+# LVM records recovery metadata here when creating/removing temporary snapshots.
+ReadWritePaths=/etc/lvm
+TimeoutStopSec=90s
 
 [Install]
 WantedBy=multi-user.target

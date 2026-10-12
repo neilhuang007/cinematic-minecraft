@@ -23,12 +23,16 @@ from collections.abc import Callable, Iterable
 
 LOG = logging.getLogger("mc-backup-events")
 PLAYER = r"[A-Za-z0-9_]{3,16}"
+SERVER_LOG = r"^\[\d{2}:\d{2}:\d{2}\] \[Server thread/INFO\]: "
 LOGIN_RE = re.compile(
-    rf"\[Server thread/INFO\]: (?P<player>{PLAYER})\[(?P<endpoint>[^\]]+)\] "
+    SERVER_LOG + rf"(?P<player>{PLAYER})\[(?P<endpoint>[^\]]+)\] "
     r"logged in with entity id \d+\b"
 )
 LOGOUT_RE = re.compile(
-    rf"\[Server thread/INFO\]: (?P<player>{PLAYER}) left the game(?:\s|$)"
+    SERVER_LOG + rf"(?P<player>{PLAYER}) left the game(?:\s|$)"
+)
+COMMAND_RE = re.compile(
+    SERVER_LOG + rf"\[MC_BACKUP_(?P<action>REQUEST|STATUS)\] (?P<player>{PLAYER})$"
 )
 SERVICE_BOUNDARY_RE = re.compile(
     r"^(?:Starting|Started) minecraft\.service\b"
@@ -83,6 +87,11 @@ class EventWatcher:
 
     def process_line(self, line: str) -> tuple[str, str] | None:
         """Process one journal message and return its emitted event, if any."""
+        command = COMMAND_RE.fullmatch(line)
+        if command:
+            event = "manual" if command["action"] == "REQUEST" else "status"
+            self.trigger(event, command["player"])
+            return event, command["player"]
         if SERVICE_BOUNDARY_RE.search(line):
             # A Minecraft process generation owns its player connections.
             # Never carry names from a crashed/stopped generation into the
@@ -127,9 +136,14 @@ class EventWatcher:
 
 def backup_trigger(backup_command: str) -> Callable[[str, str], None]:
     def trigger(event: str, player: str) -> None:
-        LOG.info("Requesting %s backup for real player %s", event, player)
+        LOG.info("Requesting backup action %s for %s", event, player)
+        arguments = (
+            [backup_command, f"--{event}", player]
+            if event in {"manual", "status"}
+            else [backup_command, "--event", event, player]
+        )
         completed = subprocess.run(
-            [backup_command, "--event", event, player],
+            arguments,
             check=False,
         )
         if completed.returncode != 0:

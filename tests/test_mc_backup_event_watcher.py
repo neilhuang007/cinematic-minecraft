@@ -103,6 +103,26 @@ class EventWatcherTests(unittest.TestCase):
         )
         self.assertEqual([("logout", "RealPlayer")], resumed_events)
 
+    def test_operator_command_requests_a_manual_checkpoint(self) -> None:
+        self.assertEqual(
+            ("manual", "RealPlayer"),
+            self.process("[MC_BACKUP_REQUEST] RealPlayer"),
+        )
+        self.assertEqual([("manual", "RealPlayer")], self.events)
+
+    def test_command_marker_in_chat_or_rcon_feedback_is_ignored(self) -> None:
+        for message in (
+            "<RealPlayer> [MC_BACKUP_REQUEST] RealPlayer",
+            "[Rcon: [MC_BACKUP_REQUEST] RealPlayer]",
+            "[MC_BACKUP_REQUEST] RealPlayer extra",
+            "[MC_BACKUP_REQUEST] ../../etc",
+        ):
+            self.assertIsNone(self.process(message))
+        self.assertEqual([], self.events)
+
+    def test_status_command_uses_separate_status_action(self) -> None:
+        self.assertEqual(("status", "Server"), self.process("[MC_BACKUP_STATUS] Server"))
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -1,0 +1,11 @@
+[Unit]
+Description=Prune and compact Minecraft backups independently of snapshot creation
+After=local-fs.target
+RequiresMountsFor=/srv /var/lib/minecraft-backups
+
+[Service]
+Type=oneshot
+TimeoutStartSec=30min
+ExecStart=/usr/local/bin/mc-backup.sh --maintenance
+Nice=10
+IOSchedulingClass=idle
