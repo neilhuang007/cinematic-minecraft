@@ -32,7 +32,7 @@ esac
 
 if [[ "${MC_BACKUP_LOCK_HELD:-0}" != 1 && "$mode" != status ]]; then
   install -d -m 0750 "$STATE_DIR"
-  exec flock -x "$LOCK_FILE" env MC_BACKUP_LOCK_HELD=1 "$0" "$@"
+  exec flock --close -x "$LOCK_FILE" env MC_BACKUP_LOCK_HELD=1 "$0" "$@"
 fi
 [[ -r "$ENV_FILE" ]] || { echo "Missing backup environment: $ENV_FILE" >&2; exit 1; }
 read -r env_owner env_mode < <(stat -c '%u %a' "$ENV_FILE")
@@ -78,7 +78,7 @@ notify_player() {
 }
 
 if [[ "$mode" == status ]]; then
-  message="$(python3 - "$STATE_DIR/last-success.json" "$BORG_REPO" <<'PY'
+  message="$(python3 - "$STATE_DIR/last-success.json" "$BORG_REPO" "$SRV_DIR" <<'PY'
 import json, pathlib, shutil, sys
 p = pathlib.Path(sys.argv[1])
 try:
@@ -87,7 +87,8 @@ try:
 except (OSError, ValueError, KeyError):
     text = 'No successful backup recorded by the new snapshot worker yet.'
 free = shutil.disk_usage(sys.argv[2]).free / 2**30
-print(f'{text} Free backup storage: {free:.1f} GiB.')
+world_free = shutil.disk_usage(sys.argv[3]).free / 2**30
+print(f'{text} Free storage: backups {free:.1f} GiB; world/apps {world_free:.1f} GiB.')
 PY
 )"
   notify_player "$message" aqua
@@ -104,6 +105,19 @@ housekeeping() {
   borg prune --stats --list --keep-last 2 --glob-archives 'mc-incomplete-*' || result=$?
   # Run compaction even when a preceding command reports a warning/error.
   borg compact --verbose || result=$?
+  python3 - "$BORG_REPO" "$SRV_DIR" "$MIN_FREE_GIB" <<'PY' || result=$?
+import shutil, sys
+healthy = True
+for name, path in zip(('backup', 'world/apps'), sys.argv[1:3]):
+    disk = shutil.disk_usage(path)
+    used_percent = 100 * disk.used / (disk.used + disk.free)
+    free_gib = disk.free / 2**30
+    print(f'Storage health: {name} {used_percent:.1f}% used, {free_gib:.1f} GiB available.')
+    if used_percent >= 85 or free_gib < int(sys.argv[3]):
+        print(f'ERROR: {name} storage needs attention.', file=sys.stderr)
+        healthy = False
+sys.exit(0 if healthy else 1)
+PY
   return "$result"
 }
 
