@@ -26,7 +26,9 @@ def main():
     for path in (root / 'mods').glob('*.jar'):
         with zipfile.ZipFile(path) as archive:
             if 'fabric.mod.json' in archive.namelist():
-                metadata = json.loads(archive.read('fabric.mod.json'))
+                # Some existing mods use literal newlines in description fields,
+                # accepted by Fabric's JSON reader but rejected by strict json.loads.
+                metadata = json.loads(archive.read('fabric.mod.json'), strict=False)
                 installed_ids.setdefault(metadata['id'], []).append(path)
 
     pending = []
