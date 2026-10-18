@@ -1,0 +1,9 @@
+{
+  "minecraft": "1.21.11",
+  "server": "/srv/minecraft/servers/fabric-1.21.11",
+  "old_file": "servux-fabric-1.21.11-0.9.5.jar",
+  "old_sha256": "bcbb9ec44dcd376edf5f4dfef1742aaf70dd4f64f29bf8342be2a2e98c7b22d8",
+  "new_file": "servux-fabric-1.21.11-0.9.9.jar",
+  "new_sha256": "aa50af9563e7c9fbede3952f59eb4de2d06fb3bf370d54400a9403268913e927",
+  "url": "https://cdn.modrinth.com/data/zQhsx8KF/versions/9041JwWA/servux-fabric-1.21.11-0.9.9.jar"
+}
