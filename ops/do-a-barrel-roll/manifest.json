@@ -1,0 +1,27 @@
+{
+  "minecraft": "1.21.11",
+  "server": "/srv/minecraft/servers/fabric-1.21.11",
+  "mods": [
+    {
+      "id": "do_a_barrel_roll",
+      "version": "3.8.3",
+      "filename": "do_a_barrel_roll-fabric-3.8.3+1.21.11.jar",
+      "sha256": "2d45fba2913b33991e63524cf4fdafc535a9cc13c5d4a976d64a979eb3e73264",
+      "url": "https://cdn.modrinth.com/data/6FtRfnLg/versions/QyuEXDMC/do_a_barrel_roll-fabric-3.8.3%2B1.21.11.jar"
+    },
+    {
+      "id": "cicada",
+      "version": "0.14.3+1.21.9-1.21.10",
+      "filename": "cicada-lib-0.14.3+1.21.9-1.21.10.jar",
+      "sha256": "f4eff57973caed08c4eedb6e642a2d6c9a3ccc4a67ac15736ed5153b93c98fec",
+      "url": "https://cdn.modrinth.com/data/IwCkru1D/versions/CqAskfnS/cicada-lib-0.14.3%2B1.21.9-1.21.10.jar"
+    },
+    {
+      "id": "yet_another_config_lib_v3",
+      "version": "3.8.2+1.21.11-fabric",
+      "filename": "yet_another_config_lib_v3-3.8.2+1.21.11-fabric.jar",
+      "sha256": "49c279bc28c80ca17d6c21c3dd299ec1c115b892272f21b3f034ed782829babd",
+      "url": "https://cdn.modrinth.com/data/1eAoo2KR/versions/pHWDw3Vc/yet_another_config_lib_v3-3.8.2%2B1.21.11-fabric.jar"
+    }
+  ]
+}
